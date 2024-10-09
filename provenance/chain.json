@@ -5,6 +5,7 @@
   "network_type": "mainnet",
   "website": "https://provenance.io/",
   "pretty_name": "Provenance",
+  "chain_type": "cosmos",
   "chain_id": "pio-mainnet-1",
   "bech32_prefix": "pb",
   "daemon_name": "provenanced",
@@ -44,11 +45,6 @@
     },
     "cosmwasm_version": "0.30",
     "cosmwasm_enabled": true,
-    "ibc_go_version": "6.2.0",
-    "ics_enabled": [
-      "ics20-1",
-      "ics27-1"
-    ],
     "binaries": {
       "linux/amd64": "https://github.com/provenance-io/provenance/releases/download/v1.17.0/provenance-linux-amd64-v1.17.0.zip"
     },
@@ -193,14 +189,25 @@
         },
         "cosmwasm_version": "0.30",
         "cosmwasm_enabled": true,
-        "ibc_go_version": "6.1.0",
-        "ics_enabled": [
-          "ics20-1"
-        ],
         "binaries": {
           "linux/amd64": "https://github.com/provenance-io/provenance/releases/download/v1.14.1/provenance-linux-amd64-v1.14.1.zip"
         },
-        "next_version_name": "quicksilver"
+        "next_version_name": "quicksilver",
+        "sdk": {
+          "type": "cosmos",
+          "version": "0.46.10"
+        },
+        "cosmwasm": {
+          "version": "0.30",
+          "enabled": true
+        },
+        "ibc": {
+          "type": "go",
+          "version": "6.1.0",
+          "ics_enabled": [
+            "ics20-1"
+          ]
+        }
       },
       {
         "name": "quicksilver",
@@ -217,14 +224,21 @@
           "type": "tendermint",
           "version": "0.34.26"
         },
-        "ibc_go_version": "6.1.1",
-        "ics_enabled": [
-          "ics20-1"
-        ],
         "binaries": {
           "linux/amd64": "https://github.com/provenance-io/provenance/releases/download/v1.15.2/provenance-linux-amd64-v1.15.2.zip"
         },
-        "next_version_name": "rust"
+        "next_version_name": "rust",
+        "sdk": {
+          "type": "cosmos",
+          "version": "0.46.10"
+        },
+        "ibc": {
+          "type": "go",
+          "version": "6.1.1",
+          "ics_enabled": [
+            "ics20-1"
+          ]
+        }
       },
       {
         "name": "rust",
@@ -241,13 +255,24 @@
         },
         "cosmwasm_version": "0.30",
         "cosmwasm_enabled": true,
-        "ibc_go_version": "6.2.0",
-        "ics_enabled": [
-          "ics20-1",
-          "ics27-1"
-        ],
         "binaries": {
           "linux/amd64": "https://github.com/provenance-io/provenance/releases/download/v1.16.0/provenance-linux-amd64-v1.16.0.zip"
+        },
+        "sdk": {
+          "type": "cosmos",
+          "version": "0.46.13"
+        },
+        "cosmwasm": {
+          "version": "0.30",
+          "enabled": true
+        },
+        "ibc": {
+          "type": "go",
+          "version": "6.2.0",
+          "ics_enabled": [
+            "ics20-1",
+            "ics27-1"
+          ]
         }
       },
       {
@@ -265,16 +290,43 @@
         },
         "cosmwasm_version": "0.30",
         "cosmwasm_enabled": true,
-        "ibc_go_version": "6.2.0",
-        "ics_enabled": [
-          "ics20-1",
-          "ics27-1"
-        ],
         "binaries": {
           "linux/amd64": "https://github.com/provenance-io/provenance/releases/download/v1.17.0/provenance-linux-amd64-v1.17.0.zip"
+        },
+        "sdk": {
+          "type": "cosmos",
+          "version": "0.46.13"
+        },
+        "cosmwasm": {
+          "version": "0.30",
+          "enabled": true
+        },
+        "ibc": {
+          "type": "go",
+          "version": "6.2.0",
+          "ics_enabled": [
+            "ics20-1",
+            "ics27-1"
+          ]
         }
       }
-    ]
+    ],
+    "sdk": {
+      "type": "cosmos",
+      "version": "0.46.13"
+    },
+    "ibc": {
+      "type": "go",
+      "version": "6.2.0",
+      "ics_enabled": [
+        "ics20-1",
+        "ics27-1"
+      ]
+    },
+    "cosmwasm": {
+      "version": "0.30",
+      "enabled": true
+    }
   },
   "logo_URIs": {
     "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/provenance/images/prov.png",
@@ -306,6 +358,16 @@
         "id": "ad3386812bb9f2fee4e9da6d9f37547afc948977",
         "address": "provenance-seed.panthea.eu:42656",
         "provider": "Panthea EU"
+      },
+      {
+        "id": "10ed1e176d874c8bb3c7c065685d2da6a4b86475",
+        "address": "seed-provenance.ibs.team:16675",
+        "provider": "Inter Blockchain Services"
+      },
+      {
+        "id": "258f523c96efde50d5fe0a9faeea8a3e83be22ca",
+        "address": "seed.pio-mainnet-1.provenance.aviaone.com:10277",
+        "provider": "AVIAONE 🟢"
       }
     ],
     "persistent_peers": [
@@ -344,7 +406,7 @@
         "provider": "Inter Blockchain Services"
       },
       {
-        "address": "https://provenance-rpc.highstakes.ch:26657/",
+        "address": "https://provenance-rpc.highstakes.ch",
         "provider": "High Stakes 🇨🇭"
       },
       {
@@ -354,6 +416,14 @@
       {
         "address": "https://provenance-rpc.panthea.eu",
         "provider": "Panthea EU"
+      },
+      {
+        "address": "https://provenance_mainnet_rpc.chain.whenmoonwhenlambo.money",
+        "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+      },
+      {
+        "address": "https://rpc.pio-mainnet-1.provenance.aviaone.com",
+        "provider": "AVIAONE 🟢"
       }
     ],
     "rest": [
@@ -370,6 +440,10 @@
         "provider": "Figure"
       },
       {
+        "address": "https://provenance.api.m.stavr.tech",
+        "provider": "🔥STAVR🔥"
+      },
+      {
         "address": "https://api-provenance-ia.cosmosia.notional.ventures/",
         "provider": "Notional"
       },
@@ -378,7 +452,7 @@
         "provider": "Inter Blockchain Services"
       },
       {
-        "address": "https://provenance-api.highstakes.ch:1317/",
+        "address": "https://provenance-api.highstakes.ch",
         "provider": "High Stakes 🇨🇭"
       },
       {
@@ -388,6 +462,14 @@
       {
         "address": "https://provenance-api.panthea.eu",
         "provider": "Panthea EU"
+      },
+      {
+        "address": "https://provenance_mainnet_api.chain.whenmoonwhenlambo.money",
+        "provider": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥"
+      },
+      {
+        "address": "https://api.pio-mainnet-1.provenance.aviaone.com",
+        "provider": "AVIAONE 🟢"
       }
     ],
     "grpc": [
@@ -410,6 +492,10 @@
       {
         "address": "provenance-grpc.panthea.eu:16780",
         "provider": "Panthea EU"
+      },
+      {
+        "address": "grpc.pio-mainnet-1.provenance.aviaone.com:9231",
+        "provider": "AVIAONE 🟢"
       }
     ]
   },
@@ -436,22 +522,43 @@
       "account_page": "https://www.mintscan.io/provenance/accounts/${accountAddress}"
     },
     {
+      "kind": "🔥STAVR🔥",
+      "url": "https://explorer.stavr.tech/Provenance",
+      "tx_page": "https://explorer.stavr.tech/Provenance/txs/${txHash}",
+      "account_page": "https://explorer.stavr.tech/Provenance/account/${accountAddress}"
+    },
+    {
+      "kind": "ezstaking",
+      "url": "https://ezstaking.app/provenance",
+      "tx_page": "https://ezstaking.app/provenance/txs/${txHash}",
+      "account_page": "https://ezstaking.app/provenance/account/${accountAddress}"
+    },
+    {
       "kind": "atomscan",
       "url": "https://atomscan.com/provenance",
       "tx_page": "https://atomscan.com/provenance/transactions/${txHash}",
       "account_page": "https://atomscan.com/provenance/accounts/${accountAddress}"
     },
     {
-      "kind": "bigdipper",
-      "url": "https://bigdipper.live/provenance",
-      "tx_page": "https://bigdipper.live/provenance/transactions/${txHash}",
-      "account_page": "https://bigdipper.live/provenance/accounts/${accountAddress}"
+      "kind": "🚀 WHEN MOON 🌕 WHEN LAMBO 🔥",
+      "url": "https://explorer.whenmoonwhenlambo.money/provenance",
+      "tx_page": "https://explorer.whenmoonwhenlambo.money/provenance/tx/${txHash}",
+      "account_page": "https://explorer.whenmoonwhenlambo.money/provenance/account/${accountAddress}"
+    },
+    {
+      "kind": "AVIAONE 🟢",
+      "url": "https://mainnet.explorer.aviaone.com/provenance",
+      "tx_page": "https://mainnet.explorer.aviaone.com/provenance/tx/${txHash}",
+      "account_page": "https://mainnet.explorer.aviaone.com/provenance/account/${accountAddress}"
     }
   ],
   "images": [
     {
       "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/provenance/images/prov.png",
-      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/provenance/images/prov.svg"
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/provenance/images/prov.svg",
+      "theme": {
+        "primary_color_hex": "#4c7cdc"
+      }
     }
   ]
 }

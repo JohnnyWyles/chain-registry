@@ -11,21 +11,22 @@ import * as path from 'path';
 
 export let chainNameToDirectoryMap = new Map();
 
-export const chainRegistryRoot = "../../..";
+export const chainRegistryRoot = "../../../chain-registry";
 
-const networkTypeToDirectoryNameMap = new Map();
+export const networkTypeToDirectoryNameMap = new Map();
 networkTypeToDirectoryNameMap.set("mainnet", "");
 networkTypeToDirectoryNameMap.set("testnet", "testnets");
 const networkTypes = Array.from(networkTypeToDirectoryNameMap.keys());
 
-const domainToDirectoryNameMap = new Map();
+export const domainToDirectoryNameMap = new Map();
 domainToDirectoryNameMap.set("cosmos", "");
 domainToDirectoryNameMap.set("non-cosmos", "_non-cosmos");
 const domains = Array.from(domainToDirectoryNameMap.keys());
 
-const fileToFileNameMap = new Map();
+export const fileToFileNameMap = new Map();
 fileToFileNameMap.set("chain", "chain.json");
 fileToFileNameMap.set("assetlist", "assetlist.json");
+fileToFileNameMap.set("versions", "versions.json");
 const files = Array.from(domainToDirectoryNameMap.keys());
 
 export const nonChainDirectories = [
@@ -36,14 +37,20 @@ export const nonChainDirectories = [
   "_memo_keys",
   "_non-cosmos",
   "_template",
+  "_scripts",
   "testnets",
   ".gitignore",
   "assetlist.schema.json",
   "chain.schema.json",
   "ibc_data.schema.json",
   "memo_keys.schema.json",
+  "versions.schema.json",
   "README.md",
-  "LICENSE"
+  "LICENSE",
+  "package.json",
+  "package-lock.json",
+  "eslint.config.mjs",
+  "primary_colors.py"
 ]
 
 export const assetSchema = {
@@ -64,6 +71,13 @@ export const assetSchema = {
   keywords: []
 }
 
+export const schemas = new Map([
+  ["ibc", "ibc_data.schema.json"],
+  ["chain", "chain.schema.json"],
+  ["assetlist", "assetlist.schema.json"],
+  ["versions", "versions.schema.json"],
+]);
+
 export const bech32ConfigSuffixMap = new Map([
   ["bech32PrefixAccAddr", ""],
   ["bech32PrefixAccPub", "pub"],
@@ -74,7 +88,7 @@ export const bech32ConfigSuffixMap = new Map([
 ]);
 
 
-const networkTypeToDirectoryMap = new Map();
+export const networkTypeToDirectoryMap = new Map();
 networkTypeToDirectoryMap.set("mainnet", "");
 networkTypeToDirectoryMap.set("testnet", "testnets");
 for (const [networkType, directory] of networkTypeToDirectoryMap.entries()) {
@@ -83,7 +97,7 @@ for (const [networkType, directory] of networkTypeToDirectoryMap.entries()) {
 
 const fileNames = {
   chain: "chain.json",
-  assetlist: "assetlist.json",
+  assetlist: "assetlist.json"
 };
 
 let paths = {};
@@ -229,6 +243,41 @@ export function getAssetProperty(chainName, baseDenom, property) {
   }
 }
 
+
+export function getAssetDecimals(chainName, baseDenom) {
+  let decimals;
+  let display = getAssetProperty(chainName, baseDenom, "display");
+  let denom_units = getAssetProperty(chainName, baseDenom, "denom_units");
+  denom_units?.forEach((denom_unit) => {
+    if(
+      denom_unit.denom == display ||
+      denom_unit.aliases?.includes(display)
+    ) {
+      decimals = denom_unit.exponent;
+      return;
+    }
+  });
+  return decimals;
+}
+
+
+export function getAssetObject(chainName, baseDenom) {
+  const assets = getFileProperty(chainName, "assetlist", "assets");
+  if(assets) {
+    let selectedAsset;
+    assets.forEach((asset) => {
+      if(asset.base == baseDenom) {
+        selectedAsset = asset;
+        return;
+      }
+    });
+    if(selectedAsset) {
+      return selectedAsset;
+    }
+  }
+}
+
+
 export function setAssetProperty(chainName, baseDenom, property, value) {
   const assets = getFileProperty(chainName, "assetlist", "assets");
   if(assets) {
@@ -248,6 +297,37 @@ export function getAssetPropertyWithTrace(chainName, baseDenom, property) {
     if (property != "traces") {
       let traces = getAssetProperty(chainName, baseDenom, "traces");
       if (traces) {
+        let originAsset = {
+          chainName: traces[traces.length - 1].counterparty.chain_name,
+          baseDenom: traces[traces.length - 1].counterparty.base_denom
+        }
+        return getAssetPropertyWithTrace(originAsset.chainName, originAsset.baseDenom, property);
+      }
+    }
+  }
+  return value;
+}
+
+export function getAssetPropertyWithTraceCustom(chainName, baseDenom, property, types) {
+  let value = getAssetProperty(chainName, baseDenom, property);
+  if (value) { return value; }
+  if (property === "traces") { return; }
+  let traces = getAssetProperty(chainName, baseDenom, "traces");
+  if (!traces) { return; }
+  if (!types.includes(traces[traces.length - 1].type)) { return; }
+  let originAsset = {
+    chainName: traces[traces.length - 1].counterparty.chain_name,
+    baseDenom: traces[traces.length - 1].counterparty.base_denom
+  }
+  return getAssetPropertyWithTraceCustom(originAsset.chainName, originAsset.baseDenom, property, types);
+}
+
+export function getAssetPropertyWithTraceIBC(chainName, baseDenom, property) {
+  let value = getAssetProperty(chainName, baseDenom, property);
+  if (!value) {
+    if (property != "traces") {
+      let traces = getAssetProperty(chainName, baseDenom, "traces");
+      if (traces && (traces[traces.length - 1].type == "ibc" || traces[traces.length - 1].type == "ibc-cw20")) {
         let originAsset = {
           chainName: traces[traces.length - 1].counterparty.chain_name,
           baseDenom: traces[traces.length - 1].counterparty.base_denom
